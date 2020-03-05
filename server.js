@@ -13,7 +13,8 @@ let noteList = [];
 // Set up body parsing, static, and route middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "Develop/public"));
+
+app.use(express.static("Develop/public"));
 
 // Start the server on the port
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
