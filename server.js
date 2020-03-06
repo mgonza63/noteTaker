@@ -19,22 +19,23 @@ app.use(express.static("Develop/public"));
 // Start the server on the port
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
 
-// app.get("/", function(req, res) {
-//     try {
-//         // res.sendFile(path.join(__dirname, "Develop/public/index.html"));
 
-//     } catch (err) {
-//         console.log(err);
-//     }
+app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "Develop/public/index.html"));
+  });
 
-//   });
+
+app.get("/notes", function(req, res) {
+    res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
+  });
 
 app.get("/api/notes", function(err, res) {
     try{
-        noteList = fs.readFileSync("Develop/db/db.json", "utf8");
-        res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
+        // noteList = fs.readFileSync("Develop/db/db.json", "utf8");
+        noteList = JSON.parse(fs.readFileSync("Develop/db/db.json", "utf8"));
+        // res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
         // console.log(noteList);
-        noteList = JSON.parse(noteList);
+        // noteList = JSON.parse(noteList);
 
     } catch (err) {
         console.log(err);
@@ -44,11 +45,11 @@ app.get("/api/notes", function(err, res) {
 
 app.post("/api/notes", function(req, res) {
     try {
-        noteList = fs.readFileSync("./Develop/db/db.json", "utf8");
-        noteList = JSON.parse(noteList);
+        noteList = JSON.parse(fs.readFileSync("Develop/db/db.json", "utf8"));
+        // noteList = JSON.parse(noteList);
         req.body.id = noteList.length;
         noteList.push(req.body);
-        console.log(noteList);
+        // console.log(noteList);
 
         fs.writeFile("./Develop/db/db.json", noteList, "utf8", function(err) {
             if (err) throw err;
@@ -84,12 +85,3 @@ app.delete("/api/notes/:id", function(req, res) {
         
     }
 });
-
-app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "Develop/public/index.html"));
-  });
-
-
-app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
-  });
