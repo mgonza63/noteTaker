@@ -55,7 +55,7 @@ app.post("/api/notes", function(req, res) {
             if (err) throw err;
         });
 
-        res.json(JSON.parse(noteList));
+        res.json(noteList);
 
 
     } catch (err) {
@@ -66,7 +66,7 @@ app.post("/api/notes", function(req, res) {
 
 app.delete("/api/notes/:id", function(req, res) {
     try {
-        noteList = fs.writeFileSync("./Develop/db/db.json", "utf8");
+        noteList = fs.writeFileSync("Develop/db/db.json", "utf8");
 
         noteList = JSON.parse(noteList);
 
