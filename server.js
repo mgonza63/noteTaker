@@ -1,4 +1,5 @@
 const express = require("express");
+const db = require("./Develop/db/db.json");
 
 const path = require("path");
 
@@ -65,23 +66,19 @@ app.post("/api/notes", function(req, res) {
 });
 
 app.delete("/api/notes/:id", function(req, res) {
-    try {
-        noteList = fs.writeFileSync("Develop/db/db.json", "utf8");
+    let noteId = req.params.id;
 
-        noteList = JSON.parse(noteList);
+    fs.readFile("./Develop/db/db.json", "utf8", (err, data) => {
+      if (err) throw err;
 
-        noteList = noteList.filter(function(note) {
-            return note.id != req.params.id;
-        });
-        noteList = JSON.stringify(noteList);
+      const allNotes = JSON.parse(data);
+      const newAllNotes = allNotes.filter(note => note.id != noteId);
 
-        fs.writeFile("./Develop/db/db.json", noteList, "utf8", function (err) {
-            if (err) throw err;
-        });
+      fs.writeFile("./Develop/db/db.json", JSON.stringify(newAllNotes, null, 2), err => {
+        if (err) throw err;
+        res.send(db);
+        console.log("Note deleted!")
+    });
+});
 
-        res.send(JSON.parse(noteList));
-    } catch (err) {
-        console.log(err);
-        
-    }
 });
